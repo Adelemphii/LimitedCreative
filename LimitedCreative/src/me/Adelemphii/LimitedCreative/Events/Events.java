@@ -54,7 +54,8 @@ public class Events implements Listener
                         }
                     }
                 }
-            } // If they have "limitedcreative.admin" don't stop the event.
+            }
+        // If they have "limitedcreative.admin" don't stop the event.
         } else if (event.getPlayer().hasPermission("limitedcreative.admin")) {
             event.setCancelled(false);
         }
@@ -87,9 +88,23 @@ public class Events implements Listener
                             	event.setCancelled(true);
                             	player.sendMessage(ChatColor.RED + "You cannot interact with that while in LC!");
                         	}
-                    	}
-                	}
-            	} // If they have "limitedcreative.admin" don't stop the event.
+                    	} // End of interactables
+                    	
+                    	String entityPlaced = event.getItem().getType().name();
+                    	List<String> bEntities = (List<String>)main.getConfig().getStringList("blacklisted-entities");
+                    	
+                    	if(!player.hasPermission("limitedcreative.admin")) {
+                    		for(String blacklistedEntity : bEntities) {
+                    			if(entityPlaced.equalsIgnoreCase(blacklistedEntity)) {
+                    				event.setCancelled(true);
+                    				player.sendMessage(ChatColor.RED + "You cannot place that while in LC!");
+                    			}
+                    		}
+                    	} else { event.setCancelled(false); } // End of blacklisted-entities
+                	} // End of 'Enabled'
+            	} // end of right_click_block action
+            	
+            // If they have "limitedcreative.admin" don't stop the event.
             } else if (event.getPlayer().hasPermission("limitedcreative.admin")) {
             	event.setCancelled(false);
             }

@@ -9,3 +9,7 @@ blacklisted-interactables:
   - hopper
   - trapped_chest
   - furnace
+blacklisted-entities:
+  - minecart
+  - tnt_minecart
+  - furnace_minecart
