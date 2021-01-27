@@ -18,7 +18,7 @@ public class Main extends JavaPlugin {
 	/*
 	 *	LimitedCreative by Adelemphii
 	 *	Check out my github for any updates to the code!
-	 *	https://github.com/Adelemphii 
+	 *	https://github.com/Adelemphii/LimitedCreative
 	 */
 	
     public HashMap<Player, UUID> lc = new HashMap<>();
