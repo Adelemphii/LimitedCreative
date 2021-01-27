@@ -15,7 +15,7 @@ public class Creative implements CommandExecutor
 	}
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-    		// This is a mess, but it works.
+    	
             if (label.equalsIgnoreCase("LimitedCreative") || label.equalsIgnoreCase("lc")) {
                 if (!(sender instanceof Player)) {
                     sender.sendMessage("Players only m'dude.");

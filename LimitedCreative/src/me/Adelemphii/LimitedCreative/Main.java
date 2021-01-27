@@ -29,7 +29,6 @@ public class Main extends JavaPlugin {
         pm.registerEvents(new Events(this), this);
         
         this.getCommand("LimitedCreative").setExecutor(new Creative(this));
-        this.getCommand("lcreload").setExecutor(new Creative(this));
         
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
