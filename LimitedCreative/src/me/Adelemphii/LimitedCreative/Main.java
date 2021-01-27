@@ -31,7 +31,8 @@ public class Main extends JavaPlugin {
         this.getCommand("LimitedCreative").setExecutor(new Creative(this));
         this.getCommand("lcreload").setExecutor(new Creative(this));
         
-        this.getConfig().options().copyDefaults();
+        this.getConfig().options().copyDefaults(true);
+        this.saveConfig();
     }
     
     public void onDisable() {

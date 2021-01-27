@@ -99,9 +99,11 @@ public class Events implements Listener
                     				event.setCancelled(true);
                     				player.sendMessage(ChatColor.RED + "You cannot place that while in LC!");
                     			}
+                    			
                     		}
                     	} else { event.setCancelled(false); } // End of blacklisted-entities
                 	} // End of 'Enabled'
+                	
             	} // end of right_click_block action
             	
             // If they have "limitedcreative.admin" don't stop the event.
