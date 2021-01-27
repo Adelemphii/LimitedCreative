@@ -1,0 +1,11 @@
+enabled: true
+blacklisted-blocks:
+  - diamond_block
+  - netherite_block
+  - emerald_block
+  - hay_block
+blacklisted-interactables:
+  - chest
+  - hopper
+  - trapped_chest
+  - furnace

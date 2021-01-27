@@ -1,0 +1,11 @@
+main: me.Adelemphii.LimitedCreative.Main
+name: LimitedCreative
+version: 1.0
+api-version: 1.13
+author: Adelemphii
+
+commands:
+  LimitedCreative:
+    aliases: lc
+  lcreload:
+  LimitedCreativeList:
