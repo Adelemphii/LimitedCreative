@@ -1,15 +1,24 @@
+# This turns the whole config file on or off, if "false" none of the blacklists function.
 enabled: true
+
+# Specify which blocks are able to be placed.
 blacklisted-blocks:
   - diamond_block
+  - bedrock
   - netherite_block
   - emerald_block
   - hay_block
+
+#Specify what inventories and blocks can be interacted with (right-clicked)
 blacklisted-interactables:
   - chest
-  - hopper
-  - trapped_chest
   - furnace
+  - trapped_chest
+  - furnace_minecart
+  - hopper
+
+# Specify what entities can't be spawned through creative mode.
 blacklisted-entities:
+  - villager_spawn_egg
   - minecart
   - tnt_minecart
-  - furnace_minecart
