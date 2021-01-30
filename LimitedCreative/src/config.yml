@@ -1,7 +1,10 @@
 # This turns the whole config file on or off, if "false" none of the blacklists function.
 enabled: true
 
-# Specify which blocks are able to be placed.
+# Glowing Effect or Armor? true for Glowing, false for Armor
+glowing: true
+
+# Specify which blocks are able to be placed
 blacklisted-blocks:
   - diamond_block
   - bedrock
@@ -17,7 +20,7 @@ blacklisted-interactables:
   - furnace_minecart
   - hopper
 
-# Specify what entities can't be spawned through creative mode.
+# Specify what entities can't be spawned through creative mode
 blacklisted-entities:
   - villager_spawn_egg
   - minecart

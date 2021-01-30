@@ -1,14 +1,26 @@
 package me.Adelemphii.LimitedCreative.Events;
 
-import me.Adelemphii.LimitedCreative.*;
-import org.bukkit.event.*;
-import org.bukkit.*;
-import org.bukkit.entity.*;
-import java.util.*;
-import org.bukkit.event.player.*;
-import org.bukkit.event.block.*;
-import org.bukkit.event.inventory.*;
-import org.bukkit.event.entity.*;
+import java.util.List;
+
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.potion.PotionEffectType;
+
+import me.Adelemphii.LimitedCreative.Main;
 
 public class Events implements Listener
 {
@@ -81,29 +93,33 @@ public class Events implements Listener
             List<String> bBlocks = (List<String>)main.getConfig().getStringList("blacklisted-interactables");
             if (!event.getPlayer().hasPermission("limitedcreative.admin")) {
             	if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            		String block = event.getClickedBlock().getBlockData().getMaterial().name();
-                	if (enabled) {
-                    	for (String blacklistedBlock : bBlocks) {
-                        	if (block.equalsIgnoreCase(blacklistedBlock)) {
-                            	event.setCancelled(true);
-                            	player.sendMessage(ChatColor.RED + "You cannot interact with that while in LC!");
-                        	}
-                    	} // End of interactables
-                    	
-                    	String entityPlaced = event.getItem().getType().name();
-                    	List<String> bEntities = (List<String>)main.getConfig().getStringList("blacklisted-entities");
-                    	
-                    	if(!player.hasPermission("limitedcreative.admin")) {
-                    		for(String blacklistedEntity : bEntities) {
-                    			if(entityPlaced.equalsIgnoreCase(blacklistedEntity)) {
-                    				event.setCancelled(true);
-                    				player.sendMessage(ChatColor.RED + "You cannot place that while in LC!");
-                    			}
-                    			
-                    		}
-                    	} else { event.setCancelled(false); } // End of blacklisted-entities
-                	} // End of 'Enabled'
-                	
+            		
+            		if(event.getClickedBlock() == null) {
+            			// do nothing
+            		} else {
+	            		String block = event.getClickedBlock().getBlockData().getMaterial().name();
+	                	if (enabled) {
+	                    	for (String blacklistedBlock : bBlocks) {
+	                        	if (block.equalsIgnoreCase(blacklistedBlock)) {
+	                            	event.setCancelled(true);
+	                            	player.sendMessage(ChatColor.RED + "You cannot interact with that while in LC!");
+	                        	}
+	                    	} // End of interactables
+	                    	
+	                    	String entityPlaced = event.getItem().getType().name();
+	                    	List<String> bEntities = (List<String>)main.getConfig().getStringList("blacklisted-entities");
+	                    	
+	                    	if(!player.hasPermission("limitedcreative.admin")) {
+	                    		for(String blacklistedEntity : bEntities) {
+	                    			if(entityPlaced.equalsIgnoreCase(blacklistedEntity)) {
+	                    				event.setCancelled(true);
+	                    				player.sendMessage(ChatColor.RED + "You cannot place that while in LC!");
+	                    			}
+	                    			
+	                    		}
+	                    	} else { event.setCancelled(false); } // End of blacklisted-entities
+	                	} // End of 'Enabled'
+            		}
             	} // end of right_click_block action
             	
             // If they have "limitedcreative.admin" don't stop the event.
@@ -132,5 +148,20 @@ public class Events implements Listener
                 event.setCancelled(true);
             }
         }
+    }
+    
+    // Stop them from drinking milk if they have glowing effect in LC.
+    @EventHandler
+    public void onConsume(PlayerItemConsumeEvent event) {
+    	if(main.lc.containsKey(event.getPlayer())) {
+    		Player player = event.getPlayer();
+    		if(event.getItem().getType() == null) {
+    			// do nothing
+    		} else if(event.getItem().getType() == Material.MILK_BUCKET) {
+    			if(player.hasPotionEffect(PotionEffectType.GLOWING)) {
+    				event.setCancelled(true);
+    			}
+    		}
+    	}
     }
 }

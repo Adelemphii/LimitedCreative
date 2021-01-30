@@ -21,6 +21,7 @@ public class Main extends JavaPlugin {
 	 *	https://github.com/Adelemphii/LimitedCreative
 	 */
 	
+	// Should eventually change it from Player, UUID to String, UUID.
     public HashMap<Player, UUID> lc = new HashMap<>();
     public HashMap<UUID, ItemStack[]> invs = new HashMap<>();
     

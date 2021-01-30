@@ -5,6 +5,8 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.*;
 import org.bukkit.*;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class Creative implements CommandExecutor
 {
@@ -31,13 +33,14 @@ public class Creative implements CommandExecutor
                         if (player.getGameMode() == GameMode.CREATIVE) {
                             player.getInventory().clear();
                             player.setGameMode(GameMode.SURVIVAL);
+                            player.removePotionEffect(PotionEffectType.GLOWING);
                             player.sendMessage(ChatColor.RED + player.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Survival.");
                             main.lc.remove(player.getPlayer(), player.getUniqueId());
                             main.restoreInventory(player.getPlayer());
                         }
                         else if (player.getGameMode() != GameMode.CREATIVE) {
                             main.saveInventory(player.getPlayer());
-                            creativeArmor(player);
+                            creativeShown(player);
                             player.setGameMode(GameMode.CREATIVE);
                             player.sendMessage(ChatColor.RED + player.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Creative.");
                             main.lc.put(player.getPlayer(), player.getUniqueId());
@@ -52,13 +55,14 @@ public class Creative implements CommandExecutor
                         if (target.getGameMode() == GameMode.CREATIVE) {
                             target.getInventory().clear();
                             target.setGameMode(GameMode.SURVIVAL);
+                            player.removePotionEffect(PotionEffectType.GLOWING);
                             target.sendMessage(ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Survival.");
                             main.lc.remove(target.getPlayer(), target.getUniqueId());
                             main.restoreInventory(target.getPlayer());
                         }
                         else if (target.getGameMode() != GameMode.CREATIVE) {
                             main.saveInventory(target.getPlayer());
-                            creativeArmor(target);
+                            creativeShown(target);
                             target.setGameMode(GameMode.CREATIVE);
                             target.sendMessage(ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Creative.");
                             main.lc.put(target.getPlayer(), target.getUniqueId());
@@ -74,14 +78,21 @@ public class Creative implements CommandExecutor
     } // end of onCommand
     
     // Give the player in LC colored armor.
-    public void creativeArmor(Player player) {
-        player.getInventory().setHelmet(new ItemStack(Material.LEATHER_HELMET));
-        player.getInventory().setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
-        player.getInventory().setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
-        player.getInventory().setBoots(new ItemStack(Material.LEATHER_BOOTS));
-        ItemStack[] armor = player.getEquipment().getArmorContents();
-        armor = changeColor(armor, Color.fromRGB(242, 2, 2));
-        player.getEquipment().setArmorContents(armor);
+    public void creativeShown(Player player) {
+    	
+    	Boolean glowing = main.getConfig().getBoolean("glowing");
+    	
+    	if(!glowing) {
+	        player.getInventory().setHelmet(new ItemStack(Material.LEATHER_HELMET));
+	        player.getInventory().setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
+	        player.getInventory().setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
+	        player.getInventory().setBoots(new ItemStack(Material.LEATHER_BOOTS));
+	        ItemStack[] armor = player.getEquipment().getArmorContents();
+	        armor = changeColor(armor, Color.fromRGB(242, 2, 2));
+	        player.getEquipment().setArmorContents(armor);
+    	} else {
+			player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 100000, 1));
+    	}
     }
     
     public ItemStack[] changeColor(ItemStack[] a, Color color) {
