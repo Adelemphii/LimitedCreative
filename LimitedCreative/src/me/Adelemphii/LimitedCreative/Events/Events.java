@@ -25,7 +25,6 @@ import me.Adelemphii.LimitedCreative.Main;
 public class Events implements Listener
 {
 	Main main;
-	
 	public Events(Main main) {
 		this.main = main;
 	}

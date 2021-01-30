@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffectType;
 
 import me.Adelemphii.LimitedCreative.Events.Events;
 
@@ -58,6 +59,7 @@ public class Main extends JavaPlugin {
     public void restoreInventoryOnCrash() {
         for (Player player : this.lc.keySet()) {
             player.setGameMode(GameMode.SURVIVAL);
+            player.removePotionEffect(PotionEffectType.GLOWING);
         }
         for (Map.Entry<UUID, ItemStack[]> entry : this.invs.entrySet()) {
             Player player2 = Bukkit.getPlayer(entry.getKey());

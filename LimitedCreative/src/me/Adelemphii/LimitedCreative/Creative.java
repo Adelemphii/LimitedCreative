@@ -11,7 +11,6 @@ import org.bukkit.potion.PotionEffectType;
 public class Creative implements CommandExecutor
 {
 	Main main;
-	
 	public Creative(Main main) {
 		this.main = main;
 	}
