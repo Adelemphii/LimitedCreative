@@ -14,7 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import me.Adelemphii.LimitedCreative.Events.Events;
 
-public class Main extends JavaPlugin {
+public class LimitedCreative extends JavaPlugin {
 	
 	/*
 	 *	LimitedCreative by Adelemphii
