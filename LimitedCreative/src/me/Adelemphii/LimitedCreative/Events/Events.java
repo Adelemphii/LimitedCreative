@@ -24,25 +24,25 @@ import me.Adelemphii.LimitedCreative.LimitedCreative;
 
 public class Events implements Listener
 {
-	LimitedCreative limitedCreative;
-	public Events(LimitedCreative limitedCreative) {
-		this.limitedCreative = limitedCreative;
+	LimitedCreative plugin;
+	public Events(LimitedCreative plugin) {
+		this.plugin = plugin;
 	}
     
 	// Set player back to survival with their default inventory on leave.
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-        if (limitedCreative.lc.containsValue(event.getPlayer().getUniqueId())) {
-            limitedCreative.restoreInventory(event.getPlayer());
+        if (plugin.lc.containsValue(event.getPlayer().getUniqueId())) {
+            plugin.restoreInventory(event.getPlayer());
             event.getPlayer().setGameMode(GameMode.SURVIVAL);
-            limitedCreative.lc.remove(event.getPlayer(), event.getPlayer().getUniqueId());
+            plugin.lc.remove(event.getPlayer(), event.getPlayer().getUniqueId());
         }
     }
     
     // Don't allow people in LC to damage entities.
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        if (limitedCreative.lc.containsKey(event.getDamager())) {
+        if (plugin.lc.containsKey(event.getDamager())) {
             event.setCancelled(true);
         }
     }
@@ -54,9 +54,9 @@ public class Events implements Listener
         Player player = event.getPlayer();
         String block = event.getBlock().getBlockData().getMaterial().name();
         if (!event.getPlayer().hasPermission("limitedcreative.admin")) {
-            if (limitedCreative.lc.containsKey(event.getPlayer())) {
-                boolean enabled = limitedCreative.getConfig().getBoolean("enabled");
-                List<String> bBlocks = (List<String>)limitedCreative.getConfig().getStringList("blacklisted-blocks");
+            if (plugin.lc.containsKey(event.getPlayer())) {
+                boolean enabled = plugin.getConfig().getBoolean("enabled");
+                List<String> bBlocks = (List<String>)plugin.getConfig().getStringList("blacklisted-blocks");
                 if (enabled) {
                     for (String blacklistedBlock : bBlocks) {
                         if (block.equalsIgnoreCase(blacklistedBlock)) {
@@ -75,7 +75,7 @@ public class Events implements Listener
     // Don't let players in LC drop items.
     @EventHandler
     public void onDrop(PlayerDropItemEvent event) {
-        if (limitedCreative.lc.containsValue(event.getPlayer().getUniqueId())) {
+        if (plugin.lc.containsValue(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
             Player player = event.getPlayer();
             player.sendMessage(ChatColor.RED + "You cannot drop items!");
@@ -86,10 +86,10 @@ public class Events implements Listener
     // specified in config.yml 'blacklisted-interactables'
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-        if (limitedCreative.lc.containsKey(event.getPlayer())) {
+        if (plugin.lc.containsKey(event.getPlayer())) {
             Player player = event.getPlayer();
-            boolean enabled = limitedCreative.getConfig().getBoolean("enabled");
-            List<String> bBlocks = (List<String>)limitedCreative.getConfig().getStringList("blacklisted-interactables");
+            boolean enabled = plugin.getConfig().getBoolean("enabled");
+            List<String> bBlocks = (List<String>)plugin.getConfig().getStringList("blacklisted-interactables");
             if (!event.getPlayer().hasPermission("limitedcreative.admin")) {
             	if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             		
@@ -106,7 +106,7 @@ public class Events implements Listener
 	                    	} // End of interactables
 	                    	
 	                    	String entityPlaced = event.getItem().getType().name();
-	                    	List<String> bEntities = (List<String>)limitedCreative.getConfig().getStringList("blacklisted-entities");
+	                    	List<String> bEntities = (List<String>)plugin.getConfig().getStringList("blacklisted-entities");
 	                    	
 	                    	if(!player.hasPermission("limitedcreative.admin")) {
 	                    		for(String blacklistedEntity : bEntities) {
@@ -131,7 +131,7 @@ public class Events implements Listener
     // Don't let them remove the leather armor in LC (Its buggy, still appears in inventory.)
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (limitedCreative.lc.containsKey(event.getWhoClicked()) && event.getSlotType() == InventoryType.SlotType.ARMOR) {
+        if (plugin.lc.containsKey(event.getWhoClicked()) && event.getSlotType() == InventoryType.SlotType.ARMOR) {
             event.setCancelled(true);
             Player player = (Player) event.getWhoClicked();
             player.updateInventory();
@@ -143,7 +143,7 @@ public class Events implements Listener
     public void onItemPickup(EntityPickupItemEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player)event.getEntity();
-            if (limitedCreative.lc.containsKey(player)) {
+            if (plugin.lc.containsKey(player)) {
                 event.setCancelled(true);
             }
         }
@@ -152,7 +152,7 @@ public class Events implements Listener
     // Stop them from drinking milk if they have glowing effect in LC.
     @EventHandler
     public void onConsume(PlayerItemConsumeEvent event) {
-    	if(limitedCreative.lc.containsKey(event.getPlayer())) {
+    	if(plugin.lc.containsKey(event.getPlayer())) {
     		Player player = event.getPlayer();
     		if(event.getItem().getType() == null) {
     			// do nothing

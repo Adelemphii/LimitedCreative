@@ -10,9 +10,9 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Creative implements CommandExecutor
 {
-	LimitedCreative limitedCreative;
-	public Creative(LimitedCreative limitedCreative) {
-		this.limitedCreative = limitedCreative;
+	LimitedCreative plugin;
+	public Creative(LimitedCreative plugin) {
+		this.plugin = plugin;
 	}
     
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -34,15 +34,15 @@ public class Creative implements CommandExecutor
                             player.setGameMode(GameMode.SURVIVAL);
                             player.removePotionEffect(PotionEffectType.GLOWING);
                             player.sendMessage(ChatColor.RED + player.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Survival.");
-                            limitedCreative.lc.remove(player.getPlayer(), player.getUniqueId());
-                            limitedCreative.restoreInventory(player.getPlayer());
+                            plugin.lc.remove(player.getPlayer(), player.getUniqueId());
+                            plugin.restoreInventory(player.getPlayer());
                         }
                         else if (player.getGameMode() != GameMode.CREATIVE) {
-                            limitedCreative.saveInventory(player.getPlayer());
+                        	plugin.saveInventory(player.getPlayer());
                             creativeShown(player);
                             player.setGameMode(GameMode.CREATIVE);
                             player.sendMessage(ChatColor.RED + player.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Creative.");
-                            limitedCreative.lc.put(player.getPlayer(), player.getUniqueId());
+                            plugin.lc.put(player.getPlayer(), player.getUniqueId());
                         }
                     }
                     if (args.length == 1) {
@@ -56,15 +56,15 @@ public class Creative implements CommandExecutor
                             target.setGameMode(GameMode.SURVIVAL);
                             player.removePotionEffect(PotionEffectType.GLOWING);
                             target.sendMessage(ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Survival.");
-                            limitedCreative.lc.remove(target.getPlayer(), target.getUniqueId());
-                            limitedCreative.restoreInventory(target.getPlayer());
+                            plugin.lc.remove(target.getPlayer(), target.getUniqueId());
+                            plugin.restoreInventory(target.getPlayer());
                         }
                         else if (target.getGameMode() != GameMode.CREATIVE) {
-                            limitedCreative.saveInventory(target.getPlayer());
+                        	plugin.saveInventory(target.getPlayer());
                             creativeShown(target);
                             target.setGameMode(GameMode.CREATIVE);
                             target.sendMessage(ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Creative.");
-                            limitedCreative.lc.put(target.getPlayer(), target.getUniqueId());
+                            plugin.lc.put(target.getPlayer(), target.getUniqueId());
                         }
                     }
                 }
@@ -79,7 +79,7 @@ public class Creative implements CommandExecutor
     // Give the player in LC colored armor.
     public void creativeShown(Player player) {
     	
-    	Boolean glowing = limitedCreative.getConfig().getBoolean("glowing");
+    	Boolean glowing = plugin.getConfig().getBoolean("glowing");
     	
     	if(!glowing) {
 	        player.getInventory().setHelmet(new ItemStack(Material.LEATHER_HELMET));
