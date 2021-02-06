@@ -43,6 +43,11 @@ public class Creative implements CommandExecutor {
                     sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to do that!");
                     return true;
                 }
+                
+                if(args[0].equalsIgnoreCase("nightvision") || (args[0].equalsIgnoreCase("nv"))) {
+                	Player player = (Player) sender;
+                	player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100000, 1));
+                }
             }
             return false;
     } // end of onCommand
@@ -51,12 +56,14 @@ public class Creative implements CommandExecutor {
     public void creativeShown(Player player) {
     	
     	Boolean glowing = plugin.getConfig().getBoolean("glowing");
+    	PlayerInventory pInv = player.getInventory();
     	
     	if(!glowing) {
-	        player.getInventory().setHelmet(new ItemStack(Material.LEATHER_HELMET));
-	        player.getInventory().setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
-	        player.getInventory().setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
-	        player.getInventory().setBoots(new ItemStack(Material.LEATHER_BOOTS));
+	        pInv.setHelmet(new ItemStack(Material.LEATHER_HELMET));
+	        pInv.setChestplate(new ItemStack(Material.LEATHER_HELMET));
+	        pInv.setLeggings(new ItemStack(Material.LEATHER_HELMET));
+	        pInv.setBoots(new ItemStack(Material.LEATHER_HELMET));
+	        
 	        ItemStack[] armor = player.getEquipment().getArmorContents();
 	        armor = changeColor(armor, Color.fromRGB(242, 2, 2));
 	        player.getEquipment().setArmorContents(armor);
@@ -84,6 +91,7 @@ public class Creative implements CommandExecutor {
             player.getInventory().clear();
             player.setGameMode(GameMode.SURVIVAL);
             player.removePotionEffect(PotionEffectType.GLOWING);
+            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
             player.sendMessage(ChatColor.RED + player.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Survival.");
             plugin.lc.remove(player.getPlayer(), player.getUniqueId());
             plugin.restoreInventory(player.getPlayer());
@@ -100,6 +108,7 @@ public class Creative implements CommandExecutor {
             target.getInventory().clear();
             target.setGameMode(GameMode.SURVIVAL);
             target.removePotionEffect(PotionEffectType.GLOWING);
+            target.removePotionEffect(PotionEffectType.NIGHT_VISION);
             target.sendMessage(ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Survival.");
             plugin.lc.remove(target.getPlayer(), target.getUniqueId());
             plugin.restoreInventory(target.getPlayer());

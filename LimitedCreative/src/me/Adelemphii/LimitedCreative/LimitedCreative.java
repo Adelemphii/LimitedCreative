@@ -60,6 +60,7 @@ public class LimitedCreative extends JavaPlugin {
         for (Player player : this.lc.keySet()) {
             player.setGameMode(GameMode.SURVIVAL);
             player.removePotionEffect(PotionEffectType.GLOWING);
+            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
         }
         for (Map.Entry<UUID, ItemStack[]> entry : this.invs.entrySet()) {
             Player player2 = Bukkit.getPlayer(entry.getKey());
