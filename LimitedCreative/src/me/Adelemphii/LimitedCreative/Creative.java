@@ -8,8 +8,7 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Creative implements CommandExecutor
-{
+public class Creative implements CommandExecutor {
 	LimitedCreative plugin;
 	public Creative(LimitedCreative plugin) {
 		this.plugin = plugin;
@@ -23,49 +22,21 @@ public class Creative implements CommandExecutor
                     return true;
                 }
                 if (sender.hasPermission("limitedcreative")) {
-                    Player player = (Player)sender;
+                    Player player = (Player) sender;
                     if (args.length >= 2) {
                         sender.sendMessage(ChatColor.RED + "Usage: /limitedcreative or /lc");
                         return true;
                     }
                     if (args.length == 0) {
-                        if (player.getGameMode() == GameMode.CREATIVE) {
-                            player.getInventory().clear();
-                            player.setGameMode(GameMode.SURVIVAL);
-                            player.removePotionEffect(PotionEffectType.GLOWING);
-                            player.sendMessage(ChatColor.RED + player.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Survival.");
-                            plugin.lc.remove(player.getPlayer(), player.getUniqueId());
-                            plugin.restoreInventory(player.getPlayer());
-                        }
-                        else if (player.getGameMode() != GameMode.CREATIVE) {
-                        	plugin.saveInventory(player.getPlayer());
-                            creativeShown(player);
-                            player.setGameMode(GameMode.CREATIVE);
-                            player.sendMessage(ChatColor.RED + player.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Creative.");
-                            plugin.lc.put(player.getPlayer(), player.getUniqueId());
-                        }
+                        changeGamemode(player);
                     }
                     if (args.length == 1) {
                         Player target = Bukkit.getPlayer(args[0]);
-                        if (target == null) {
+                    	if (target == null) {
                             player.sendMessage(ChatColor.RED + "That is not a valid player!");
                             return true;
-                        }
-                        if (target.getGameMode() == GameMode.CREATIVE) {
-                            target.getInventory().clear();
-                            target.setGameMode(GameMode.SURVIVAL);
-                            player.removePotionEffect(PotionEffectType.GLOWING);
-                            target.sendMessage(ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Survival.");
-                            plugin.lc.remove(target.getPlayer(), target.getUniqueId());
-                            plugin.restoreInventory(target.getPlayer());
-                        }
-                        else if (target.getGameMode() != GameMode.CREATIVE) {
-                        	plugin.saveInventory(target.getPlayer());
-                            creativeShown(target);
-                            target.setGameMode(GameMode.CREATIVE);
-                            target.sendMessage(ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Creative.");
-                            plugin.lc.put(target.getPlayer(), target.getUniqueId());
-                        }
+                        } else { changeTargetGamemode(target); }
+                        
                     }
                 }
                 else if (!sender.hasPermission("limitedcreative")) {
@@ -106,5 +77,39 @@ public class Creative implements CommandExecutor
             catch (Exception ex) {}
         }
         return a;
+    }
+    
+    public void changeGamemode(Player player) {
+    	if (player.getGameMode() == GameMode.CREATIVE) {
+            player.getInventory().clear();
+            player.setGameMode(GameMode.SURVIVAL);
+            player.removePotionEffect(PotionEffectType.GLOWING);
+            player.sendMessage(ChatColor.RED + player.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Survival.");
+            plugin.lc.remove(player.getPlayer(), player.getUniqueId());
+            plugin.restoreInventory(player.getPlayer());
+        } else if (player.getGameMode() != GameMode.CREATIVE) {
+        	plugin.saveInventory(player.getPlayer());
+            creativeShown(player);
+            player.setGameMode(GameMode.CREATIVE);
+            player.sendMessage(ChatColor.RED + player.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Creative.");
+            plugin.lc.put(player.getPlayer(), player.getUniqueId());
+        }
+    }
+    public void changeTargetGamemode(Player target) {
+        if (target.getGameMode() == GameMode.CREATIVE) {
+            target.getInventory().clear();
+            target.setGameMode(GameMode.SURVIVAL);
+            target.removePotionEffect(PotionEffectType.GLOWING);
+            target.sendMessage(ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Survival.");
+            plugin.lc.remove(target.getPlayer(), target.getUniqueId());
+            plugin.restoreInventory(target.getPlayer());
+        }
+        else if (target.getGameMode() != GameMode.CREATIVE) {
+        	plugin.saveInventory(target.getPlayer());
+            creativeShown(target);
+            target.setGameMode(GameMode.CREATIVE);
+            target.sendMessage(ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Creative.");
+            plugin.lc.put(target.getPlayer(), target.getUniqueId());
+        }
     }
 }
