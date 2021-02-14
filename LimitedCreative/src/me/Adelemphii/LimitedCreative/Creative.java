@@ -60,9 +60,9 @@ public class Creative implements CommandExecutor {
     	
     	if(!glowing) {
 	        pInv.setHelmet(new ItemStack(Material.LEATHER_HELMET));
-	        pInv.setChestplate(new ItemStack(Material.LEATHER_HELMET));
-	        pInv.setLeggings(new ItemStack(Material.LEATHER_HELMET));
-	        pInv.setBoots(new ItemStack(Material.LEATHER_HELMET));
+	        pInv.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
+	        pInv.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
+	        pInv.setBoots(new ItemStack(Material.LEATHER_BOOTS));
 	        
 	        ItemStack[] armor = player.getEquipment().getArmorContents();
 	        armor = changeColor(armor, Color.fromRGB(242, 2, 2));
