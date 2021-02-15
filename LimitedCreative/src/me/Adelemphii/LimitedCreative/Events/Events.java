@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,8 +34,16 @@ public class Events implements Listener
 	// Set player back to survival with their default inventory on leave.
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-        if (plugin.lc.containsValue(event.getPlayer().getUniqueId())) {
-            plugin.restoreInventory(event.getPlayer());
+    	Player player = event.getPlayer();
+    	
+        if (plugin.lc.containsValue(player.getUniqueId())) {
+            plugin.restoreInventory(player);
+            if(player.isFlying()) {
+	            Location playerLoc = player.getLocation();
+	            Block newLoc = playerLoc.getWorld().getHighestBlockAt(playerLoc);
+	            player.teleport(newLoc.getLocation());
+	            player.sendMessage("Teleporting you to a safe location.");
+            }
             event.getPlayer().setGameMode(GameMode.SURVIVAL);
             plugin.lc.remove(event.getPlayer(), event.getPlayer().getUniqueId());
         }

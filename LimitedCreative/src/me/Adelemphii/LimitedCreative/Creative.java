@@ -4,6 +4,7 @@ import org.bukkit.command.*;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.*;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -37,13 +38,12 @@ public class Creative implements CommandExecutor {
                         	} else {
                         		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
                         	}
-                        } else {
-                            Player target = Bukkit.getPlayer(args[0]);
-                        	if (target == null) {
-                                player.sendMessage(ChatColor.RED + "That is not a valid player!");
-                                return true;
-                            } else { changeTargetGamemode(target); }
                         }
+                        Player target = Bukkit.getPlayer(args[0]);
+                        if (target == null) {
+                       		player.sendMessage(ChatColor.RED + "That is not a valid player!");
+                       		return true;
+                        } else { changeTargetGamemode(target); }
                     }
                 }
                 else if (!sender.hasPermission("limitedcreative")) {
@@ -90,6 +90,13 @@ public class Creative implements CommandExecutor {
     
     public void changeGamemode(Player player) {
     	if (player.getGameMode() == GameMode.CREATIVE) {
+            if(player.isFlying()) {
+	            Location playerLoc = player.getLocation();
+	            Block newLoc = playerLoc.getWorld().getHighestBlockAt(playerLoc);
+	            player.teleport(newLoc.getLocation());
+	            player.sendMessage("Teleporting you to a safe location.");
+            }
+    		
             player.getInventory().clear();
             player.setGameMode(GameMode.SURVIVAL);
             player.removePotionEffect(PotionEffectType.GLOWING);
@@ -105,8 +112,18 @@ public class Creative implements CommandExecutor {
             plugin.lc.put(player.getPlayer(), player.getUniqueId());
         }
     }
-    public void changeTargetGamemode(Player target) {
+    @SuppressWarnings("deprecation")
+	public void changeTargetGamemode(Player target) {
         if (target.getGameMode() == GameMode.CREATIVE) {
+        	
+            if(target.isOnGround()) {
+	            Location playerLoc = target.getLocation();
+	            Block newLoc = playerLoc.getWorld().getHighestBlockAt(playerLoc);
+	            newLoc.getLocation().add(0, 1, 0);
+	            target.teleport(newLoc.getLocation());
+	            target.sendMessage("Teleporting you to a safe location.");
+            }
+            
             target.getInventory().clear();
             target.setGameMode(GameMode.SURVIVAL);
             target.removePotionEffect(PotionEffectType.GLOWING);

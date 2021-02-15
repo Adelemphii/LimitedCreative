@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
@@ -58,9 +60,17 @@ public class LimitedCreative extends JavaPlugin {
     
     public void restoreInventoryOnCrash() {
         for (Player player : this.lc.keySet()) {
+            if(player.isFlying()) {
+	            Location playerLoc = player.getLocation();
+	            Block newLoc = playerLoc.getWorld().getHighestBlockAt(playerLoc);
+	            player.teleport(newLoc.getLocation());
+	            player.sendMessage("Teleporting you to a safe location.");
+            }
+        	
             player.setGameMode(GameMode.SURVIVAL);
             player.removePotionEffect(PotionEffectType.GLOWING);
             player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            
         }
         for (Map.Entry<UUID, ItemStack[]> entry : this.invs.entrySet()) {
             Player player2 = Bukkit.getPlayer(entry.getKey());
