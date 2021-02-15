@@ -24,29 +24,31 @@ public class Creative implements CommandExecutor {
                 if (sender.hasPermission("limitedcreative")) {
                     Player player = (Player) sender;
                     if (args.length >= 2) {
-                        sender.sendMessage(ChatColor.RED + "Usage: /limitedcreative or /lc");
+                        sender.sendMessage(ChatColor.RED + "Usage: /limitedcreative or /lc <playername:nightvision>");
                         return true;
                     }
                     if (args.length == 0) {
                         changeGamemode(player);
                     }
                     if (args.length == 1) {
-                        Player target = Bukkit.getPlayer(args[0]);
-                    	if (target == null) {
-                            player.sendMessage(ChatColor.RED + "That is not a valid player!");
-                            return true;
-                        } else { changeTargetGamemode(target); }
-                        
+                        if(args[0].equalsIgnoreCase("nightvision") || (args[0].equalsIgnoreCase("nv"))) {
+                        	if(!(player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) && (plugin.lc.containsKey(player))) {
+                        		player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100000, 1));
+                        	} else {
+                        		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+                        	}
+                        } else {
+                            Player target = Bukkit.getPlayer(args[0]);
+                        	if (target == null) {
+                                player.sendMessage(ChatColor.RED + "That is not a valid player!");
+                                return true;
+                            } else { changeTargetGamemode(target); }
+                        }
                     }
                 }
                 else if (!sender.hasPermission("limitedcreative")) {
                     sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to do that!");
                     return true;
-                }
-                
-                if(args[0].equalsIgnoreCase("nightvision") || (args[0].equalsIgnoreCase("nv"))) {
-                	Player player = (Player) sender;
-                	player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100000, 1));
                 }
             }
             return false;
