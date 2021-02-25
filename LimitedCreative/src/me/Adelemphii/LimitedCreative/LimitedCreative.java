@@ -5,8 +5,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -60,12 +62,34 @@ public class LimitedCreative extends JavaPlugin {
     
     public void restoreInventoryOnCrash() {
         for (Player player : this.lc.keySet()) {
+        	
+        	// Need to implement a legit way to do this, instead of this
+        	// This causes the player to fall through half-blocks, and spawn inside blocks
+        	/*
             if(player.isFlying()) {
 	            Location playerLoc = player.getLocation();
 	            Block newLoc = playerLoc.getWorld().getHighestBlockAt(playerLoc);
+	            
 	            player.teleport(newLoc.getLocation());
 	            player.sendMessage("Teleporting you to a safe location.");
             }
+            */
+        	
+        	if(player.isFlying()) {
+        		Location loc = player.getLocation();
+        		Block highestBlock;
+        		
+        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
+        			loc.subtract(0, 1, 0);
+        			highestBlock = loc.getBlock();
+        			if(highestBlock.getType() != Material.AIR) {
+        				loc.add(0, 1, 0);
+        				player.teleport(loc);
+        				player.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
+        				break;
+        			}
+        		}
+        	}
         	
             player.setGameMode(GameMode.SURVIVAL);
             player.removePotionEffect(PotionEffectType.GLOWING);

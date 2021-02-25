@@ -90,12 +90,22 @@ public class Creative implements CommandExecutor {
     
     public void changeGamemode(Player player) {
     	if (player.getGameMode() == GameMode.CREATIVE) {
-            if(player.isFlying()) {
-	            Location playerLoc = player.getLocation();
-	            Block newLoc = playerLoc.getWorld().getHighestBlockAt(playerLoc);
-	            player.teleport(newLoc.getLocation());
-	            player.sendMessage("Teleporting you to a safe location.");
-            }
+        	if(player.isFlying()) {
+        		
+        		Location loc = player.getLocation();
+        		Block highestBlock;
+        		
+        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
+        			loc.subtract(0, 1, 0);
+        			highestBlock = loc.getBlock();
+        			if(highestBlock.getType() != Material.AIR) {
+        				loc.add(0, 1, 0);
+        				player.teleport(loc);
+        				player.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
+        				break;
+        			}
+        		}
+        	}
     		
             player.getInventory().clear();
             player.setGameMode(GameMode.SURVIVAL);
@@ -112,17 +122,25 @@ public class Creative implements CommandExecutor {
             plugin.lc.put(player.getPlayer(), player.getUniqueId());
         }
     }
-    @SuppressWarnings("deprecation")
 	public void changeTargetGamemode(Player target) {
         if (target.getGameMode() == GameMode.CREATIVE) {
         	
-            if(target.isOnGround()) {
-	            Location playerLoc = target.getLocation();
-	            Block newLoc = playerLoc.getWorld().getHighestBlockAt(playerLoc);
-	            newLoc.getLocation().add(0, 1, 0);
-	            target.teleport(newLoc.getLocation());
-	            target.sendMessage("Teleporting you to a safe location.");
-            }
+        	if(target.isFlying()) {
+        		
+        		Location loc = target.getLocation();
+        		Block highestBlock;
+        		
+        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
+        			loc.subtract(0, 1, 0);
+        			highestBlock = loc.getBlock();
+        			if(highestBlock.getType() != Material.AIR) {
+        				loc.add(0, 1, 0);
+        				target.teleport(loc);
+        				target.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
+        				break;
+        			}
+        		}
+        	}
             
             target.getInventory().clear();
             target.setGameMode(GameMode.SURVIVAL);

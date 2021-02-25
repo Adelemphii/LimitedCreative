@@ -38,12 +38,22 @@ public class Events implements Listener
     	
         if (plugin.lc.containsValue(player.getUniqueId())) {
             plugin.restoreInventory(player);
-            if(player.isFlying()) {
-	            Location playerLoc = player.getLocation();
-	            Block newLoc = playerLoc.getWorld().getHighestBlockAt(playerLoc);
-	            player.teleport(newLoc.getLocation());
-	            player.sendMessage("Teleporting you to a safe location.");
-            }
+        	if(player.isFlying()) {
+        		
+        		Location loc = player.getLocation();
+        		Block highestBlock;
+        		
+        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
+        			loc.subtract(0, 1, 0);
+        			highestBlock = loc.getBlock();
+        			if(highestBlock.getType() != Material.AIR) {
+        				loc.add(0, 1, 0);
+        				player.teleport(loc);
+        				player.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
+        				break;
+        			}
+        		}
+        	}
             event.getPlayer().setGameMode(GameMode.SURVIVAL);
             plugin.lc.remove(event.getPlayer(), event.getPlayer().getUniqueId());
         }
