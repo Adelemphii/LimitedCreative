@@ -38,12 +38,13 @@ public class Creative implements CommandExecutor {
                         	} else {
                         		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
                         	}
-                        }
-                        Player target = Bukkit.getPlayer(args[0]);
-                        if (target == null) {
-                       		player.sendMessage(ChatColor.RED + "That is not a valid player!");
-                       		return true;
-                        } else { changeTargetGamemode(target); }
+                        } else {
+	                        Player target = Bukkit.getPlayer(args[0]);
+	                        if (target == null) {
+	                       		player.sendMessage(ChatColor.RED + "That is not a valid player!");
+	                       		return true;
+	                        } else { changeTargetGamemode(target); }
+	                    }
                     }
                 }
                 else if (!sender.hasPermission("limitedcreative")) {
