@@ -17,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 
 import me.Adelemphii.LimitedCreative.Events.Events;
+import me.Adelemphii.LimitedCreative.Metrics.Metrics;
 
 public class LimitedCreative extends JavaPlugin {
 	
@@ -29,6 +30,7 @@ public class LimitedCreative extends JavaPlugin {
 	// Should eventually change it from Player, UUID to String, UUID.
     public HashMap<Player, UUID> lc = new HashMap<>();
     public HashMap<UUID, ItemStack[]> invs = new HashMap<>();
+    private int pluginID = 10548;
     
     public void onEnable() {
         PluginManager pm = this.getServer().getPluginManager();
@@ -38,6 +40,8 @@ public class LimitedCreative extends JavaPlugin {
         
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
+        
+        Metrics metrics = new Metrics(this, pluginID);
     }
     
     public void onDisable() {
