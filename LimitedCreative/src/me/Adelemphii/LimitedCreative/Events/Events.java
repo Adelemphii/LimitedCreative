@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -26,10 +27,12 @@ import me.Adelemphii.LimitedCreative.LimitedCreative;
 
 public class Events implements Listener
 {
+	
 	LimitedCreative plugin;
 	public Events(LimitedCreative plugin) {
 		this.plugin = plugin;
 	}
+	
     
 	// Set player back to survival with their default inventory on leave.
     @EventHandler
@@ -70,12 +73,12 @@ public class Events implements Listener
     // IF player does not have "limitedcreative.admin" permissions, do not let them place the blocks 
     // specified in config.yml 'blacklisted-blocks'
     @EventHandler
-    public void checkBlockAllowed(BlockPlaceEvent event) {
+    public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         String block = event.getBlock().getBlockData().getMaterial().name();
-        if (!event.getPlayer().hasPermission("limitedcreative.admin")) {
+        if (!player.hasPermission("limitedcreative.admin") || !player.isOp()) {
             if (plugin.lc.containsKey(event.getPlayer())) {
-                boolean enabled = plugin.getConfig().getBoolean("enabled");
+            	boolean enabled = plugin.getConfig().getBoolean("enabled");
                 List<String> bBlocks = (List<String>)plugin.getConfig().getStringList("blacklisted-blocks");
                 if (enabled) {
                     for (String blacklistedBlock : bBlocks) {
@@ -87,14 +90,14 @@ public class Events implements Listener
                 }
             }
         // If they have "limitedcreative.admin" don't stop the event.
-        } else if (event.getPlayer().hasPermission("limitedcreative.admin")) {
+        } else {
             event.setCancelled(false);
         }
     }
     
     // Don't let players in LC drop items.
     @EventHandler
-    public void onDrop(PlayerDropItemEvent event) {
+    public void onItemDrop(PlayerDropItemEvent event) {
         if (plugin.lc.containsValue(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
             Player player = event.getPlayer();
@@ -109,6 +112,7 @@ public class Events implements Listener
         if (plugin.lc.containsKey(event.getPlayer())) {
             Player player = event.getPlayer();
             boolean enabled = plugin.getConfig().getBoolean("enabled");
+            
             List<String> bBlocks = (List<String>)plugin.getConfig().getStringList("blacklisted-interactables");
             if (!event.getPlayer().hasPermission("limitedcreative.admin")) {
             	if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -125,26 +129,58 @@ public class Events implements Listener
 	                        	}
 	                    	} // End of interactables
 	                    	
-	                    	String entityPlaced = event.getItem().getType().name();
-	                    	List<String> bEntities = (List<String>)plugin.getConfig().getStringList("blacklisted-entities");
+	                    	if(event.getItem() != null) {
+		                    	String entityPlaced = event.getItem().getType().name();
+		                    	List<String> bEntities = (List<String>)plugin.getConfig().getStringList("blacklisted-entities");
+		                    	
+		                    	if(!player.hasPermission("limitedcreative.admin")) {
+		                    		for(String blacklistedEntity : bEntities) {
+		                    			if(entityPlaced.equalsIgnoreCase(blacklistedEntity)) {
+		                    				event.setCancelled(true);
+		                    				player.sendMessage(ChatColor.RED + "You cannot place that while in LC!");
+		                    			}	
+		                    		}
+		                    	} else { 
+		                    		event.setCancelled(false);
+		                    	}
+	                    	} // End of blacklisted-entities
 	                    	
-	                    	if(!player.hasPermission("limitedcreative.admin")) {
-	                    		for(String blacklistedEntity : bEntities) {
-	                    			if(entityPlaced.equalsIgnoreCase(blacklistedEntity)) {
-	                    				event.setCancelled(true);
-	                    				player.sendMessage(ChatColor.RED + "You cannot place that while in LC!");
-	                    			}
-	                    			
-	                    		}
-	                    	} else { event.setCancelled(false); } // End of blacklisted-entities
+	                    	//
+	                    	// Add some way to stop villager clicks
+	                    	//
+	                    	
 	                	} // End of 'Enabled'
             		}
             	} // end of right_click_block action
             	
             // If they have "limitedcreative.admin" don't stop the event.
-            } else if (event.getPlayer().hasPermission("limitedcreative.admin")) {
+            } else if (event.getPlayer().hasPermission("limitedcreative.admin") || player.isOp()) {
             	event.setCancelled(false);
             }
+        }
+    } // end of onInteract event
+    
+    // Prevent player in LC from breaking blocks specified in config
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        String block = event.getBlock().getBlockData().getMaterial().name();
+        
+        if (!player.hasPermission("limitedcreative.admin") || !player.isOp()) {
+            if (plugin.lc.containsKey(event.getPlayer())) {
+            	boolean enabled = plugin.getConfig().getBoolean("enabled");
+                List<String> bBlocks = (List<String>)plugin.getConfig().getStringList("blacklisted-breakables");
+                if (enabled) {
+                    for (String blacklistedBlock : bBlocks) {
+                        if (block.equalsIgnoreCase(blacklistedBlock)) {
+                            event.setCancelled(true);
+                            player.sendMessage(ChatColor.RED + "You cannot break that block while in LC!");
+                        }
+                    }
+                }
+            }
+        } else {
+        	event.setCancelled(false);
         }
     }
     

@@ -18,39 +18,79 @@ public class Creative implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
     	
             if (label.equalsIgnoreCase("LimitedCreative") || label.equalsIgnoreCase("lc")) {
-                if (!(sender instanceof Player)) {
-                    sender.sendMessage("Players only m'dude.");
-                    return true;
-                }
-                if (sender.hasPermission("limitedcreative")) {
-                    Player player = (Player) sender;
-                    if (args.length >= 2) {
-                        sender.sendMessage(ChatColor.RED + "Usage: /limitedcreative or /lc <playername:nightvision>");
+                
+                if(sender.hasPermission("limitedcreative") || sender.isOp()) {
+                	
+                	// /limitedcreative foo bar
+                    if(args.length >= 2) {
+                        sender.sendMessage(ChatColor.RED + "Usage: /limitedcreative or /lc <playername:nightvision:reload>");
                         return true;
                     }
-                    if (args.length == 0) {
-                        changeGamemode(player);
-                    }
-                    if (args.length == 1) {
-                        if(args[0].equalsIgnoreCase("nightvision") || (args[0].equalsIgnoreCase("nv"))) {
-                        	if(!(player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) && (plugin.lc.containsKey(player))) {
-                        		player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100000, 1));
-                        	} else {
-                        		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+                    
+                    if(sender instanceof Player) {
+                    	Player player = (Player) sender;
+                    	// /limitedcreative
+                        if (args.length == 0) {
+                            changeGamemode(player);
+                        }
+                        
+                        if (args.length == 1) {
+                        	switch(args[0]) {
+                        	// /limitedcreative nightvision
+                        	case "nightvision":
+                                if(!(player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) && (plugin.lc.containsKey(player))) {
+                                	player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100000, 1));
+                                } else {
+                                	player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+                                }
+                                break;
+                            // /limitedcreative nv
+                        	case "nv":
+                                if(!(player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) && (plugin.lc.containsKey(player))) {
+                                	player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100000, 1));
+                                } else {
+                                	player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+                                }
+                                break;
+                                
+                            // /limitedcreative reload
+                        	case "reload":
+                                if(player.hasPermission("limitedcreative.admin") || player.isOp()) {
+        	                        	plugin.reloadConfig();
+        	                        	player.sendMessage(ChatColor.GOLD + "LC: " + ChatColor.GREEN + "Config reloaded!");
+        	                        } else {
+        	                        	player.sendMessage("You do not have permission to use that command.");
+        	                        }
+                                break;
+                                
+                        	case "rl":
+                                if(player.hasPermission("limitedcreative.admin") || player.isOp()) {
+    	                        	plugin.reloadConfig();
+    	                        	player.sendMessage(ChatColor.GOLD + "LC: " + ChatColor.GREEN + "Config reloaded!");
+    	                        } else {
+    	                        	player.sendMessage("You do not have permission to use that command.");
+    	                        }
+                                break;
+                                
+                            // /limitedcreative <player>
+                        	default:
+	                        	Player target = Bukkit.getPlayer(args[0]);
+		                        if (target == null) {
+		                       		player.sendMessage(ChatColor.RED + "That is not a valid player!");
+		                       		return true;
+		                        } else {
+		                        	changeTargetGamemode(target);
+		                        }
+                                break;
                         	}
-                        } else {
-	                        Player target = Bukkit.getPlayer(args[0]);
-	                        if (target == null) {
-	                       		player.sendMessage(ChatColor.RED + "That is not a valid player!");
-	                       		return true;
-	                        } else { changeTargetGamemode(target); }
-	                    }
+                        	
+                        }
+                        
                     }
-                }
-                else if (!sender.hasPermission("limitedcreative")) {
-                    sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to do that!");
-                    return true;
-                }
+                    
+                } else {
+                	sender.sendMessage(ChatColor.RED + "You do not have permission to do that!");
+                } // end of hasPermission("limitedcreative")
             }
             return false;
     } // end of onCommand

@@ -22,8 +22,14 @@ import me.Adelemphii.LimitedCreative.Metrics.Metrics;
 public class LimitedCreative extends JavaPlugin {
 	
 	/*
+	 * 	
 	 *	LimitedCreative by Adelemphii
-	 *	Check out my github for any updates to the code!
+	 *	v1.2.0
+	 *
+	 *	Check out my SpigotMC for any updates to the code!
+	 *	https://www.spigotmc.org/resources/limitedcreative.88444/
+	 *
+	 *	Or my Github!
 	 *	https://github.com/Adelemphii/LimitedCreative
 	 */
 	
@@ -41,7 +47,8 @@ public class LimitedCreative extends JavaPlugin {
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
         
-        Metrics metrics = new Metrics(this, pluginID);
+        @SuppressWarnings("unused")
+		Metrics metrics = new Metrics(this, pluginID);
     }
     
     public void onDisable() {
@@ -66,19 +73,6 @@ public class LimitedCreative extends JavaPlugin {
     
     public void restoreInventoryOnCrash() {
         for (Player player : this.lc.keySet()) {
-        	
-        	// Need to implement a legit way to do this, instead of this
-        	// This causes the player to fall through half-blocks, and spawn inside blocks
-        	/*
-            if(player.isFlying()) {
-	            Location playerLoc = player.getLocation();
-	            Block newLoc = playerLoc.getWorld().getHighestBlockAt(playerLoc);
-	            
-	            player.teleport(newLoc.getLocation());
-	            player.sendMessage("Teleporting you to a safe location.");
-            }
-            */
-        	
         	if(player.isFlying()) {
         		Location loc = player.getLocation();
         		Block highestBlock;
@@ -105,4 +99,5 @@ public class LimitedCreative extends JavaPlugin {
             player2.getInventory().setContents(entry.getValue());
         }
     }
+    
 }
