@@ -22,15 +22,16 @@ import me.Adelemphii.LimitedCreative.Metrics.Metrics;
 public class LimitedCreative extends JavaPlugin {
 	
 	/*
-	 * 	
+	 * 
 	 *	LimitedCreative by Adelemphii
-	 *	v1.2.0
+	 *	v1.3.0
 	 *
 	 *	Check out my SpigotMC for any updates to the code!
 	 *	https://www.spigotmc.org/resources/limitedcreative.88444/
 	 *
 	 *	Or my Github!
 	 *	https://github.com/Adelemphii/LimitedCreative
+	 *
 	 */
 	
 	// Should eventually change it from Player, UUID to String, UUID.

@@ -1,6 +1,9 @@
 # This turns the whole config file on or off, if "false" none of the blacklists function.
 enabled: true
 
+# This determines if a player in LC can damage entities or not
+player-damage-entities: false
+
 # Glowing Effect or Armor? true for Glowing, false for Armor
 glowing: true
 

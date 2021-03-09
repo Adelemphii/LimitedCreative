@@ -19,6 +19,19 @@ public class Creative implements CommandExecutor {
     	
             if (label.equalsIgnoreCase("LimitedCreative") || label.equalsIgnoreCase("lc")) {
                 
+            	if(!(sender instanceof Player)) {
+            		if(args.length >= 1) {
+                    	Player target = Bukkit.getPlayer(args[0]);
+                        if (target == null) {
+                       		sender.sendMessage("LimitedCreative: That is not a valid player!");
+                       		return true;
+                        } else {
+                        	changeTargetGamemode(target);
+                        	sender.sendMessage("LimitedCreative: " + target.getDisplayName() + "'s gamemode has been set to " + target.getGameMode());
+                        }
+            		}
+            	}
+            	
                 if(sender.hasPermission("limitedcreative") || sender.isOp()) {
                 	
                 	// /limitedcreative foo bar
@@ -80,6 +93,7 @@ public class Creative implements CommandExecutor {
 		                       		return true;
 		                        } else {
 		                        	changeTargetGamemode(target);
+		                        	player.sendMessage(target.getDisplayName() + ChatColor.GOLD  + "'s gamemode has been set to " + target.getGameMode());;
 		                        }
                                 break;
                         	}

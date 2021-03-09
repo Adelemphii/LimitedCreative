@@ -18,6 +18,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -32,7 +33,6 @@ public class Events implements Listener
 	public Events(LimitedCreative plugin) {
 		this.plugin = plugin;
 	}
-	
     
 	// Set player back to survival with their default inventory on leave.
     @EventHandler
@@ -62,12 +62,47 @@ public class Events implements Listener
         }
     }
     
+    // Runs when a player changes gamemode
+    @EventHandler
+    public void onGamemodeChange(PlayerGameModeChangeEvent event) {
+    	if(plugin.lc.containsKey(event.getPlayer())) {
+    		if(event.getNewGameMode() == GameMode.SURVIVAL || event.getNewGameMode() == GameMode.ADVENTURE) {
+	    		Player player = event.getPlayer();
+	    		
+	    		plugin.lc.remove(player, player.getUniqueId());
+	    		plugin.restoreInventory(player);
+	        	if(player.isFlying()) {
+	        		
+	        		Location loc = player.getLocation();
+	        		Block highestBlock;
+	        		
+	        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
+	        			loc.subtract(0, 1, 0);
+	        			highestBlock = loc.getBlock();
+	        			if(highestBlock.getType() != Material.AIR) {
+	        				loc.add(0, 1, 0);
+	        				player.teleport(loc);
+	        				player.sendMessage(ChatColor.RED + "LC Warning: Detected player was flying! Teleporting you to a safe location.");
+	        				break;
+	        			}
+	        		}
+	        	}
+    		}
+    	}
+    }
+    
     // Don't allow people in LC to damage entities.
     @EventHandler
     public void onHit(EntityDamageByEntityEvent event) {
-        if (plugin.lc.containsKey(event.getDamager())) {
-            event.setCancelled(true);
-        }
+    	boolean enabled = plugin.getConfig().getBoolean("enabled");
+    	if(enabled) {
+    		boolean entityDamage = plugin.getConfig().getBoolean("player-damage-entities");
+    		if(!entityDamage) {
+		        if (plugin.lc.containsKey(event.getDamager())) {
+		            event.setCancelled(true);
+		        }
+    		}
+    	}
     }
     
     // IF player does not have "limitedcreative.admin" permissions, do not let them place the blocks 
