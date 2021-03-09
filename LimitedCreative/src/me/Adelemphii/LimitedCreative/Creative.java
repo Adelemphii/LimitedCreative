@@ -87,14 +87,19 @@ public class Creative implements CommandExecutor {
                                 
                             // /limitedcreative <player>
                         	default:
-	                        	Player target = Bukkit.getPlayer(args[0]);
-		                        if (target == null) {
-		                       		player.sendMessage(ChatColor.RED + "That is not a valid player!");
-		                       		return true;
-		                        } else {
-		                        	changeTargetGamemode(target);
-		                        	player.sendMessage(target.getDisplayName() + ChatColor.GOLD  + "'s gamemode has been set to " + target.getGameMode());;
-		                        }
+                        		// Changed permissions for giving LC to others
+                        		if(player.hasPermission("limitedcreative.give")) {
+		                        	Player target = Bukkit.getPlayer(args[0]);
+			                        if (target == null) {
+			                       		player.sendMessage(ChatColor.RED + "That is not a valid player!");
+			                       		return true;
+			                        } else {
+			                        	changeTargetGamemode(target);
+			                        	player.sendMessage(target.getDisplayName() + ChatColor.GOLD  + "'s gamemode has been set to " + target.getGameMode());
+			                        }
+                        		} else {
+                        			player.sendMessage(ChatColor.RED + "You do not have permission to do that.");
+                        		}
                                 break;
                         	}
                         	
