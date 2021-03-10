@@ -26,7 +26,7 @@ public class Creative implements CommandExecutor {
                        		sender.sendMessage("LimitedCreative: That is not a valid player!");
                        		return true;
                         } else {
-                        	changeTargetGamemode(target);
+                        	changeTargetGamemode(target, sender);
                         	sender.sendMessage("LimitedCreative: " + target.getDisplayName() + "'s gamemode has been set to " + target.getGameMode());
                         }
             		}
@@ -94,7 +94,7 @@ public class Creative implements CommandExecutor {
 			                       		player.sendMessage(ChatColor.RED + "That is not a valid player!");
 			                       		return true;
 			                        } else {
-			                        	changeTargetGamemode(target);
+			                        	changeTargetGamemode(target, player);
 			                        	player.sendMessage(target.getDisplayName() + ChatColor.GOLD  + "'s gamemode has been set to " + target.getGameMode());
 			                        }
                         		} else {
@@ -149,7 +149,7 @@ public class Creative implements CommandExecutor {
     }
     
     public void changeGamemode(Player player) {
-    	if (player.getGameMode() == GameMode.CREATIVE) {
+    	if (player.getGameMode() == GameMode.CREATIVE && plugin.lc.containsKey(player)) {
         	if(player.isFlying()) {
         		
         		Location loc = player.getLocation();
@@ -180,10 +180,33 @@ public class Creative implements CommandExecutor {
             player.setGameMode(GameMode.CREATIVE);
             player.sendMessage(ChatColor.RED + player.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Creative.");
             plugin.lc.put(player.getPlayer(), player.getUniqueId());
+        } else if (player.getGameMode() == GameMode.CREATIVE && !plugin.lc.containsKey(player)) {
+        	if(player.isFlying()) {
+        		
+        		Location loc = player.getLocation();
+        		Block highestBlock;
+        		
+        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
+        			loc.subtract(0, 1, 0);
+        			highestBlock = loc.getBlock();
+        			if(highestBlock.getType() != Material.AIR) {
+        				loc.add(0, 1, 0);
+        				player.teleport(loc);
+        				player.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
+        				break;
+        			}
+        		}
+        	}
+        	
+        	plugin.saveInventory(player);
+        	creativeShown(player);
+        	plugin.lc.put(player.getPlayer(), player.getUniqueId());
+        	player.sendMessage(ChatColor.RED + "Please note: It is not recommended to start in creative mode when using this command, for the next time you use /limitedcreative"
+        			+ " you will be placed in survival mode with your inventory from when you started in creative.");
         }
     }
-	public void changeTargetGamemode(Player target) {
-        if (target.getGameMode() == GameMode.CREATIVE) {
+	public void changeTargetGamemode(Player target, CommandSender sender) {
+        if (target.getGameMode() == GameMode.CREATIVE && plugin.lc.containsKey(target)) {
         	
         	if(target.isFlying()) {
         		
@@ -216,6 +239,29 @@ public class Creative implements CommandExecutor {
             target.setGameMode(GameMode.CREATIVE);
             target.sendMessage(ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Creative.");
             plugin.lc.put(target.getPlayer(), target.getUniqueId());
+        } else if (target.getGameMode() == GameMode.CREATIVE && !plugin.lc.containsKey(target)) {
+        	if(target.isFlying()) {
+        		
+        		Location loc = target.getLocation();
+        		Block highestBlock;
+        		
+        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
+        			loc.subtract(0, 1, 0);
+        			highestBlock = loc.getBlock();
+        			if(highestBlock.getType() != Material.AIR) {
+        				loc.add(0, 1, 0);
+        				target.teleport(loc);
+        				target.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
+        				break;
+        			}
+        		}
+        	}
+        	
+        	plugin.saveInventory(target);
+        	creativeShown(target);
+        	plugin.lc.put(target.getPlayer(), target.getUniqueId());
+        	sender.sendMessage(ChatColor.RED + "Please note: It is not recommended to start in creative mode when using this command, for the next time you use /limitedcreative on that target"
+        			+ " they will be placed in survival mode with their inventory from when they started in creative.");
         }
     }
 }
