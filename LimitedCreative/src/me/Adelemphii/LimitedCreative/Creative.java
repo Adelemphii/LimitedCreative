@@ -88,7 +88,7 @@ public class Creative implements CommandExecutor {
                             // /limitedcreative <player>
                         	default:
                         		// Changed permissions for giving LC to others
-                        		if(player.hasPermission("limitedcreative.give")) {
+                        		if(player.hasPermission("limitedcreative.give") || player.hasPermission("limitedcreative.admin")) {
 		                        	Player target = Bukkit.getPlayer(args[0]);
 			                        if (target == null) {
 			                       		player.sendMessage(ChatColor.RED + "That is not a valid player!");
