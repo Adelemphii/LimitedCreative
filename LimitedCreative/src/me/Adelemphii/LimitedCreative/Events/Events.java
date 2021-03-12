@@ -1,6 +1,7 @@
 package me.Adelemphii.LimitedCreative.Events;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -29,10 +30,14 @@ import me.Adelemphii.LimitedCreative.LimitedCreative;
 public class Events implements Listener
 {
 	
+	public String defaultMessage;
+	
 	LimitedCreative plugin;
 	public Events(LimitedCreative plugin) {
 		this.plugin = plugin;
 	}
+	
+	
     
 	// Set player back to survival with their default inventory on leave.
     @EventHandler
@@ -40,37 +45,10 @@ public class Events implements Listener
     	Player player = event.getPlayer();
     	
         if (plugin.lc.containsValue(player.getUniqueId())) {
+        	Boolean flyCheck = plugin.getConfig().getBoolean("gamemode-flycheck");
             plugin.restoreInventory(player);
-        	if(player.isFlying()) {
-        		
-        		Location loc = player.getLocation();
-        		Block highestBlock;
-        		
-        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
-        			loc.subtract(0, 1, 0);
-        			highestBlock = loc.getBlock();
-        			if(highestBlock.getType() != Material.AIR) {
-        				loc.add(0, 1, 0);
-        				player.teleport(loc);
-        				player.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
-        				break;
-        			}
-        		}
-        	}
-            event.getPlayer().setGameMode(GameMode.SURVIVAL);
-            plugin.lc.remove(event.getPlayer(), event.getPlayer().getUniqueId());
-        }
-    }
-    
-    // Runs when a player changes gamemode
-    @EventHandler
-    public void onGamemodeChange(PlayerGameModeChangeEvent event) {
-    	if(plugin.lc.containsKey(event.getPlayer())) {
-    		if(event.getNewGameMode() == GameMode.SURVIVAL || event.getNewGameMode() == GameMode.ADVENTURE) {
-	    		Player player = event.getPlayer();
-	    		
-	    		plugin.lc.remove(player, player.getUniqueId());
-	    		plugin.restoreInventory(player);
+            
+            if(flyCheck) {
 	        	if(player.isFlying()) {
 	        		
 	        		Location loc = player.getLocation();
@@ -82,9 +60,42 @@ public class Events implements Listener
 	        			if(highestBlock.getType() != Material.AIR) {
 	        				loc.add(0, 1, 0);
 	        				player.teleport(loc);
-	        				player.sendMessage(ChatColor.RED + "LC Warning: Detected player was flying! Teleporting you to a safe location.");
+	        				player.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
 	        				break;
 	        			}
+	        		}
+        		}
+        	}
+            event.getPlayer().setGameMode(GameMode.SURVIVAL);
+            plugin.lc.remove(event.getPlayer(), event.getPlayer().getUniqueId());
+        }
+    }
+    
+    // Runs when a player changes gamemode
+    @EventHandler
+    public void onGamemodeChange(PlayerGameModeChangeEvent event) {
+    	Boolean flyCheck = plugin.getConfig().getBoolean("gamemode-flycheck");
+    	if(plugin.lc.containsKey(event.getPlayer())) {
+    		if(event.getNewGameMode() == GameMode.SURVIVAL || event.getNewGameMode() == GameMode.ADVENTURE || event.getNewGameMode() == GameMode.SPECTATOR) {
+	    		Player player = event.getPlayer();
+	    		
+	    		plugin.lc.remove(player, player.getUniqueId());
+	    		plugin.restoreInventory(player);
+	    		if(flyCheck) {
+		        	if(player.isFlying()) {
+		        		
+		        		Location loc = player.getLocation();
+		        		Block highestBlock;
+		        		
+		        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
+		        			loc.subtract(0, 1, 0);
+		        			highestBlock = loc.getBlock();
+		        			if(highestBlock.getType() != Material.AIR) {
+		        				loc.add(0, 1, 0);
+		        				player.teleport(loc);
+		        				break;
+		        			}
+		        		}
 	        		}
 	        	}
     		}
@@ -111,15 +122,18 @@ public class Events implements Listener
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         String block = event.getBlock().getBlockData().getMaterial().name();
+        
         if (!player.hasPermission("limitedcreative.admin") || !player.isOp()) {
             if (plugin.lc.containsKey(event.getPlayer())) {
             	boolean enabled = plugin.getConfig().getBoolean("enabled");
                 List<String> bBlocks = (List<String>)plugin.getConfig().getStringList("blacklisted-blocks");
+                String message = plugin.getConfig().getString("blacklisted-block-message");
+                
                 if (enabled) {
                     for (String blacklistedBlock : bBlocks) {
                         if (block.equalsIgnoreCase(blacklistedBlock)) {
                             event.setCancelled(true);
-                            player.sendMessage(ChatColor.RED + "You cannot place that block!");
+                            player.sendMessage(configPlaceholder(message, block, "block", player));
                         }
                     }
                 }
@@ -147,8 +161,9 @@ public class Events implements Listener
         if (plugin.lc.containsKey(event.getPlayer())) {
             Player player = event.getPlayer();
             boolean enabled = plugin.getConfig().getBoolean("enabled");
-            
             List<String> bBlocks = (List<String>)plugin.getConfig().getStringList("blacklisted-interactables");
+            String message = plugin.getConfig().getString("blacklisted-interactable-message");
+            
             if (!event.getPlayer().hasPermission("limitedcreative.admin")) {
             	if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             		
@@ -160,19 +175,20 @@ public class Events implements Listener
 	                    	for (String blacklistedBlock : bBlocks) {
 	                        	if (block.equalsIgnoreCase(blacklistedBlock)) {
 	                            	event.setCancelled(true);
-	                            	player.sendMessage(ChatColor.RED + "You cannot interact with that while in LC!");
+	                            	player.sendMessage(configPlaceholder(message, block, "interactable", player));
 	                        	}
 	                    	} // End of interactables
 	                    	
 	                    	if(event.getItem() != null) {
 		                    	String entityPlaced = event.getItem().getType().name();
 		                    	List<String> bEntities = (List<String>)plugin.getConfig().getStringList("blacklisted-entities");
+		                    	String placeMessage = plugin.getConfig().getString("blacklisted-entity-message");
 		                    	
 		                    	if(!player.hasPermission("limitedcreative.admin")) {
 		                    		for(String blacklistedEntity : bEntities) {
 		                    			if(entityPlaced.equalsIgnoreCase(blacklistedEntity)) {
 		                    				event.setCancelled(true);
-		                    				player.sendMessage(ChatColor.RED + "You cannot place that while in LC!");
+		                    				player.sendMessage(configPlaceholder(placeMessage, blacklistedEntity, "entity", player));
 		                    			}	
 		                    		}
 		                    	} else { 
@@ -205,11 +221,13 @@ public class Events implements Listener
             if (plugin.lc.containsKey(event.getPlayer())) {
             	boolean enabled = plugin.getConfig().getBoolean("enabled");
                 List<String> bBlocks = (List<String>)plugin.getConfig().getStringList("blacklisted-breakables");
+                String message = plugin.getConfig().getString("blacklisted-breakable-message");
+                
                 if (enabled) {
                     for (String blacklistedBlock : bBlocks) {
                         if (block.equalsIgnoreCase(blacklistedBlock)) {
                             event.setCancelled(true);
-                            player.sendMessage(ChatColor.RED + "You cannot break that block while in LC!");
+                            player.sendMessage(configPlaceholder(message, block, "breakable", player));
                         }
                     }
                 }
@@ -253,5 +271,37 @@ public class Events implements Listener
     			}
     		}
     	}
+    }
+    
+    public String configPlaceholder(String message, String block, String config, Player player) {
+    	
+    	if(!message.equalsIgnoreCase("")) {
+	    	String newMessage = ChatColor.translateAlternateColorCodes('&', message).replace("%block%", block.toLowerCase())
+	    			.replace("%player%", player.getName());
+	    	return newMessage;
+    	} else {
+    		
+    		switch(config) {
+    		
+    		case "block":
+    			defaultMessage = (ChatColor.RED + "You cannot place that block while in LC!");
+    			break;
+    		case "interactable":
+    			defaultMessage = (ChatColor.RED + "You cannot interact with that while in LC!");
+    			break;
+    		case "entity":
+    			defaultMessage = (ChatColor.RED + "You cannot use that entity while in LC!");
+    			break;
+    		case "breakable":
+    			defaultMessage = (ChatColor.RED + "You cannot break that block while in LC!");
+    			break;
+    		default:
+    			plugin.getLogger().log(Level.SEVERE, "Something went wrong with the configPlaceholder() method in Events[line:297], contact Adelemphii#6213 on Discord to report this error!");
+    			break;
+    		
+    		}
+    		return defaultMessage;
+    	}
+    	
     }
 }

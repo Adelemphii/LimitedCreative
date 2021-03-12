@@ -21,14 +21,23 @@ public class Creative implements CommandExecutor {
                 
             	if(!(sender instanceof Player)) {
             		if(args.length >= 1) {
-                    	Player target = Bukkit.getPlayer(args[0]);
-                        if (target == null) {
-                       		sender.sendMessage("LimitedCreative: That is not a valid player!");
-                       		return true;
-                        } else {
-                        	changeTargetGamemode(target, sender);
-                        	sender.sendMessage("LimitedCreative: " + target.getDisplayName() + "'s gamemode has been set to " + target.getGameMode());
-                        }
+            			switch(args[0]) {
+            			
+            			case "reload":
+	                        	plugin.reloadConfig();
+	                        	sender.sendMessage("LimitedCreative: Config reloaded!");
+	                        	break;
+            			
+            			default:
+                        	Player target = Bukkit.getPlayer(args[0]);
+                            if (target == null) {
+                           		sender.sendMessage("LimitedCreative: That is not a valid player!");
+                           		return true;
+                            } else {
+                            	changeTargetGamemode(target, sender);
+                            	sender.sendMessage("LimitedCreative: " + target.getName() + "'s gamemode has been set to " + target.getGameMode());
+                            }
+            			}
             		}
             	}
             	
@@ -53,6 +62,8 @@ public class Creative implements CommandExecutor {
                         	case "nightvision":
                                 if(!(player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) && (plugin.lc.containsKey(player))) {
                                 	player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100000, 1));
+                                } else if (!plugin.lc.containsKey(player)){
+                                	player.sendMessage(ChatColor.RED + "This command is only available in LC.");
                                 } else {
                                 	player.removePotionEffect(PotionEffectType.NIGHT_VISION);
                                 }
@@ -61,6 +72,8 @@ public class Creative implements CommandExecutor {
                         	case "nv":
                                 if(!(player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) && (plugin.lc.containsKey(player))) {
                                 	player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100000, 1));
+                                } else if (!plugin.lc.containsKey(player)){
+                                	player.sendMessage(ChatColor.RED + "This command is only available in LC.");
                                 } else {
                                 	player.removePotionEffect(PotionEffectType.NIGHT_VISION);
                                 }
@@ -72,7 +85,7 @@ public class Creative implements CommandExecutor {
         	                        	plugin.reloadConfig();
         	                        	player.sendMessage(ChatColor.GOLD + "LC: " + ChatColor.GREEN + "Config reloaded!");
         	                        } else {
-        	                        	player.sendMessage("You do not have permission to use that command.");
+        	                        	player.sendMessage(ChatColor.RED + "You do not have permission to use that command.");
         	                        }
                                 break;
                                 
@@ -150,20 +163,24 @@ public class Creative implements CommandExecutor {
     
     public void changeGamemode(Player player) {
     	if (player.getGameMode() == GameMode.CREATIVE && plugin.lc.containsKey(player)) {
-        	if(player.isFlying()) {
-        		
-        		Location loc = player.getLocation();
-        		Block highestBlock;
-        		
-        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
-        			loc.subtract(0, 1, 0);
-        			highestBlock = loc.getBlock();
-        			if(highestBlock.getType() != Material.AIR) {
-        				loc.add(0, 1, 0);
-        				player.teleport(loc);
-        				player.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
-        				break;
-        			}
+    		Boolean flyCheck = plugin.getConfig().getBoolean("gamemode-flycheck");
+    		
+    		if(flyCheck) {
+	        	if(player.isFlying()) {
+	        		
+	        		Location loc = player.getLocation();
+	        		Block highestBlock;
+	        		
+	        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
+	        			loc.subtract(0, 1, 0);
+	        			highestBlock = loc.getBlock();
+	        			if(highestBlock.getType() != Material.AIR) {
+	        				loc.add(0, 1, 0);
+	        				player.teleport(loc);
+	        				player.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
+	        				break;
+	        			}
+	        		}
         		}
         	}
     		
@@ -181,21 +198,25 @@ public class Creative implements CommandExecutor {
             player.sendMessage(ChatColor.RED + player.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Creative.");
             plugin.lc.put(player.getPlayer(), player.getUniqueId());
         } else if (player.getGameMode() == GameMode.CREATIVE && !plugin.lc.containsKey(player)) {
-        	if(player.isFlying()) {
-        		
-        		Location loc = player.getLocation();
-        		Block highestBlock;
-        		
-        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
-        			loc.subtract(0, 1, 0);
-        			highestBlock = loc.getBlock();
-        			if(highestBlock.getType() != Material.AIR) {
-        				loc.add(0, 1, 0);
-        				player.teleport(loc);
-        				player.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
-        				break;
-        			}
-        		}
+        	Boolean flyCheck = plugin.getConfig().getBoolean("gamemode-flycheck");
+        	
+        	if(flyCheck) {
+	        	if(player.isFlying()) {
+	        		
+	        		Location loc = player.getLocation();
+	        		Block highestBlock;
+	        		
+	        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
+	        			loc.subtract(0, 1, 0);
+	        			highestBlock = loc.getBlock();
+	        			if(highestBlock.getType() != Material.AIR) {
+	        				loc.add(0, 1, 0);
+	        				player.teleport(loc);
+	        				player.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
+	        				break;
+	        			}
+	        		}
+	        	}
         	}
         	
         	plugin.saveInventory(player);
@@ -207,22 +228,25 @@ public class Creative implements CommandExecutor {
     }
 	public void changeTargetGamemode(Player target, CommandSender sender) {
         if (target.getGameMode() == GameMode.CREATIVE && plugin.lc.containsKey(target)) {
+        	Boolean flyCheck = plugin.getConfig().getBoolean("gamemode-flycheck");
         	
-        	if(target.isFlying()) {
-        		
-        		Location loc = target.getLocation();
-        		Block highestBlock;
-        		
-        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
-        			loc.subtract(0, 1, 0);
-        			highestBlock = loc.getBlock();
-        			if(highestBlock.getType() != Material.AIR) {
-        				loc.add(0, 1, 0);
-        				target.teleport(loc);
-        				target.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
-        				break;
-        			}
-        		}
+        	if(flyCheck) {
+	        	if(target.isFlying()) {
+	        		
+	        		Location loc = target.getLocation();
+	        		Block highestBlock;
+	        		
+	        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
+	        			loc.subtract(0, 1, 0);
+	        			highestBlock = loc.getBlock();
+	        			if(highestBlock.getType() != Material.AIR) {
+	        				loc.add(0, 1, 0);
+	        				target.teleport(loc);
+	        				target.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
+	        				break;
+	        			}
+	        		}
+	        	}
         	}
             
             target.getInventory().clear();
@@ -240,21 +264,25 @@ public class Creative implements CommandExecutor {
             target.sendMessage(ChatColor.RED + target.getDisplayName() + ChatColor.GOLD + "'s gamemode has been set to" + ChatColor.RED + " Creative.");
             plugin.lc.put(target.getPlayer(), target.getUniqueId());
         } else if (target.getGameMode() == GameMode.CREATIVE && !plugin.lc.containsKey(target)) {
-        	if(target.isFlying()) {
-        		
-        		Location loc = target.getLocation();
-        		Block highestBlock;
-        		
-        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
-        			loc.subtract(0, 1, 0);
-        			highestBlock = loc.getBlock();
-        			if(highestBlock.getType() != Material.AIR) {
-        				loc.add(0, 1, 0);
-        				target.teleport(loc);
-        				target.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
-        				break;
-        			}
-        		}
+        	Boolean flyCheck = plugin.getConfig().getBoolean("gamemode-flycheck");
+        	
+        	if(flyCheck) {
+	        	if(target.isFlying()) {
+	        		
+	        		Location loc = target.getLocation();
+	        		Block highestBlock;
+	        		
+	        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
+	        			loc.subtract(0, 1, 0);
+	        			highestBlock = loc.getBlock();
+	        			if(highestBlock.getType() != Material.AIR) {
+	        				loc.add(0, 1, 0);
+	        				target.teleport(loc);
+	        				target.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
+	        				break;
+	        			}
+	        		}
+	        	}
         	}
         	
         	plugin.saveInventory(target);

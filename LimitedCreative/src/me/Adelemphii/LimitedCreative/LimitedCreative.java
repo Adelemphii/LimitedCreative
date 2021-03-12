@@ -24,13 +24,16 @@ public class LimitedCreative extends JavaPlugin {
 	/*
 	 * 
 	 *	LimitedCreative by Adelemphii
-	 *	v1.3.1
+	 *	v1.4.0
 	 *
 	 *	Check out my SpigotMC for any updates to the code!
 	 *	https://www.spigotmc.org/resources/limitedcreative.88444/
 	 *
 	 *	Or my Github!
 	 *	https://github.com/Adelemphii/LimitedCreative
+	 *
+	 *  Or my Discord!
+	 *  https://discord.com/invite/sX6FUau
 	 *
 	 */
 	
@@ -74,20 +77,23 @@ public class LimitedCreative extends JavaPlugin {
     
     public void restoreInventoryOnCrash() {
         for (Player player : this.lc.keySet()) {
-        	if(player.isFlying()) {
-        		Location loc = player.getLocation();
-        		Block highestBlock;
-        		
-        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
-        			loc.subtract(0, 1, 0);
-        			highestBlock = loc.getBlock();
-        			if(highestBlock.getType() != Material.AIR) {
-        				loc.add(0, 1, 0);
-        				player.teleport(loc);
-        				player.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
-        				break;
-        			}
-        		}
+        	Boolean flyCheck = this.getConfig().getBoolean("gamemode-flycheck");
+        	if(flyCheck) {
+	        	if(player.isFlying()) {
+	        		Location loc = player.getLocation();
+	        		Block highestBlock;
+	        		
+	        		for(int y = loc.getBlockY() - 1; y > 0; y--) {
+	        			loc.subtract(0, 1, 0);
+	        			highestBlock = loc.getBlock();
+	        			if(highestBlock.getType() != Material.AIR) {
+	        				loc.add(0, 1, 0);
+	        				player.teleport(loc);
+	        				player.sendMessage(ChatColor.RED + "Warning: Detected player in air! Teleporting you to a safe location.");
+	        				break;
+	        			}
+	        		}
+	        	}
         	}
         	
             player.setGameMode(GameMode.SURVIVAL);

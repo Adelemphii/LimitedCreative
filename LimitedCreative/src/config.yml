@@ -5,7 +5,22 @@ enabled: true
 player-damage-entities: false
 
 # Glowing Effect or Armor? true for Glowing, false for Armor
-glowing: true
+glowing: false
+
+# Check if player is flying when LC is disabled
+gamemode-flycheck: true
+
+# This message is sent when a player tries to break a block which they cannot
+blacklisted-breakable-message: ""
+
+# This message is sent when a player tries to interact with a block which they cannot
+blacklisted-interactable-message: ""
+
+# This message is sent when a player tries to place an entity which they cannot
+blacklisted-entity-message: ""
+
+# This message is sent when a player tries to place a block which they cannot
+blacklisted-block-message: ""
 
 # Specify which blocks are able to be placed
 blacklisted-blocks:
