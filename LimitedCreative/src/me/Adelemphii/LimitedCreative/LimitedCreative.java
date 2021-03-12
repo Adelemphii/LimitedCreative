@@ -24,7 +24,7 @@ public class LimitedCreative extends JavaPlugin {
 	/*
 	 * 
 	 *	LimitedCreative by Adelemphii
-	 *	v1.4.0
+	 *	v1.4.0 
 	 *
 	 *	Check out my SpigotMC for any updates to the code!
 	 *	https://www.spigotmc.org/resources/limitedcreative.88444/

@@ -273,7 +273,7 @@ public class Events implements Listener
     	}
     }
     
-    // check for placeholders in config.yml
+    // check for placeholders in config.yml 
     public String configPlaceholder(String message, String block, String config, Player player) {
     	
     	if(!message.equalsIgnoreCase("")) {

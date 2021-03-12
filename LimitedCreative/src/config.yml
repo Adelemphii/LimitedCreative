@@ -32,7 +32,7 @@ blacklisted-interactables:
 
 # Specify what entities can't be spawned through creative mode
 blacklisted-entities:
-- air
+- air 
 
 #Specify what blocks cannot be broken while in LC
 blacklisted-breakables:

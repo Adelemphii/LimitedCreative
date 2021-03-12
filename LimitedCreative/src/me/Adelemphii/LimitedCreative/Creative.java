@@ -68,7 +68,7 @@ public class Creative implements CommandExecutor {
                                 	player.removePotionEffect(PotionEffectType.NIGHT_VISION);
                                 }
                                 break;
-                            // /limitedcreative nv
+                            // /limitedcreative nv 
                         	case "nv":
                                 if(!(player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) && (plugin.lc.containsKey(player))) {
                                 	player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 100000, 1));
