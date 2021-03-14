@@ -68,6 +68,7 @@ public class Events implements Listener
         	}
             event.getPlayer().setGameMode(GameMode.SURVIVAL);
             plugin.lc.remove(event.getPlayer(), event.getPlayer().getUniqueId());
+            player.removePotionEffect(PotionEffectType.GLOWING);
         }
     }
     
@@ -164,7 +165,7 @@ public class Events implements Listener
             List<String> bBlocks = (List<String>)plugin.getConfig().getStringList("blacklisted-interactables");
             String message = plugin.getConfig().getString("blacklisted-interactable-message");
             
-            if (!event.getPlayer().hasPermission("limitedcreative.admin")) {
+            if (!event.getPlayer().hasPermission("limitedcreative.admin") || player.isOp()) {
             	if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             		
             		if(event.getClickedBlock() == null) {
@@ -184,7 +185,7 @@ public class Events implements Listener
 		                    	List<String> bEntities = (List<String>)plugin.getConfig().getStringList("blacklisted-entities");
 		                    	String placeMessage = plugin.getConfig().getString("blacklisted-entity-message");
 		                    	
-		                    	if(!player.hasPermission("limitedcreative.admin")) {
+		                    	if(!player.hasPermission("limitedcreative.admin") || player.isOp()) {
 		                    		for(String blacklistedEntity : bEntities) {
 		                    			if(entityPlaced.equalsIgnoreCase(blacklistedEntity)) {
 		                    				event.setCancelled(true);

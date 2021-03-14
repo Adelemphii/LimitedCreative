@@ -24,7 +24,7 @@ public class LimitedCreative extends JavaPlugin {
 	/*
 	 * 
 	 *	LimitedCreative by Adelemphii
-	 *	v1.4.0 
+	 *	v1.4.1 
 	 *
 	 *	Check out my SpigotMC for any updates to the code!
 	 *	https://www.spigotmc.org/resources/limitedcreative.88444/
@@ -42,7 +42,7 @@ public class LimitedCreative extends JavaPlugin {
     public HashMap<UUID, ItemStack[]> invs = new HashMap<>();
     private int pluginID = 10548;
     
-    public void onEnable() {
+    public void onEnable() {	
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new Events(this), this);
         
