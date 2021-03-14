@@ -79,9 +79,10 @@ public class Events implements Listener
     	if(plugin.lc.containsKey(event.getPlayer())) {
     		if(event.getNewGameMode() == GameMode.SURVIVAL || event.getNewGameMode() == GameMode.ADVENTURE || event.getNewGameMode() == GameMode.SPECTATOR) {
 	    		Player player = event.getPlayer();
-	    		
+	    		player.removePotionEffect(PotionEffectType.GLOWING);
 	    		plugin.lc.remove(player, player.getUniqueId());
 	    		plugin.restoreInventory(player);
+	    		
 	    		if(flyCheck) {
 		        	if(player.isFlying()) {
 		        		
