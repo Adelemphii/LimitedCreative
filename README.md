@@ -10,6 +10,7 @@ Check out the video for this plugin!
 /limitedcreative or /lc - give yourself LC (requires limitedcreative)
 /limitedcreative <Target> or /lc <Target> - give others LC (Requires limitedcreative.give)
 /limitedcreative nightvision/nv or /lc nightvision/nv - give yourself nightvision while in LC (requires limitedcreative)
+
 /limitedcreative reload or /lc reload - reload the config file to update any changes (Requires OP or limitedcreative.admin)
 
 ## Features:
