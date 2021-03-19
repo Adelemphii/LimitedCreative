@@ -37,7 +37,7 @@ public class LimitedCreative extends JavaPlugin {
 	 *
 	 */
 	
-	// Should eventually change it from Player, UUID to String, UUID.
+	// Should eventually change it from Player, UUID to String, UUID. Or a hashset I guess?
     public HashMap<Player, UUID> lc = new HashMap<>();
     public HashMap<UUID, ItemStack[]> invs = new HashMap<>();
     private int pluginID = 10548;

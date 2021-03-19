@@ -186,7 +186,7 @@ public class Events implements Listener
 		                    	List<String> bEntities = (List<String>)plugin.getConfig().getStringList("blacklisted-entities");
 		                    	String placeMessage = plugin.getConfig().getString("blacklisted-entity-message");
 		                    	
-		                    	if(!player.hasPermission("limitedcreative.admin") || player.isOp()) {
+		                    	if(!player.hasPermission("limitedcreative.admin") || !player.isOp()) {
 		                    		for(String blacklistedEntity : bEntities) {
 		                    			if(entityPlaced.equalsIgnoreCase(blacklistedEntity)) {
 		                    				event.setCancelled(true);
