@@ -1,5 +1,7 @@
 # LimitedCreative
 
+## This project has been dropped, contact Adelemphii#6213 on discord if you wish to continue it. I'll hand over the Trello page of planned features/current bugs. (I'll help figure out issues with the current version, and even push bugfixes, however I wont be implementing new features after this point.)
+
 Safely allow your players to access creative mode without fear of them abusing it. Constantly updated with suggested features and bugfixes.
 Check out the video for this plugin!
 [Youtube Showcase](https://youtu.be/Z21t_WqM8ho)
@@ -14,11 +16,13 @@ Check out the video for this plugin!
 - Custom blacklisted blocks
 - Custom blacklisted interactables
 - Custom blacklisted entities
-- Custom blacklisted breakables (what blocks cannot be broken by players in LC without the "limitedcreative.admin" permission
-- Saves inventories between Survival/Adventure/Spectator and Creative gamemodes, restores them on crash/disconnect
+- Custom blacklisted breakables (what blocks cannot be broken by players in LC without the "limitedcreative.admin" permission)
+- Saves inventories between Survival and Creative gamemodes, restores them on crash/disconnect
 - Players in LC are unable to deal damage to entities and players (Toggleable in config.yml using the "player-damage-entities:" option, false by default)
-- Players in LC are distinguished from players that aren't with either a GLOWING effect, or RED leather armor. (This can be changed in the config, it is on GLOWING by default.)
+- Players in LC are distinguished from players that aren't with either a GLOWING effect, or RED leather armor. (This can be changed in the config, it is on GLOWING by default.
 - Nightvision command using /lc nightvision
+- A "gamemode-flycheck" configuration option to turn off the check if a player is flying or not when they change from LC to survival
+- Placeholders for modular error messages when someone in LC tries to break/use/place blocked entities or blocks
 
 ## Planned Features:
 I'm looking into the ability to block the creation of certain mobs via multiblock structures (i.e. wither, iron golem). Until then, I recommend blocking key blocks (wither skeleton skull) from being placed.
@@ -32,9 +36,8 @@ I am also learning various database programs to allow the tracking of blocks pla
 ## Known Bugs:
  None!
  
-# Issues & Features
+# Issues
   - To report a bug, either write an issue report on this repository or send me a DM on Discord **@Adelemphii#6213**
-  - To request a feature to the plugin, either make a request on this repository or send me a DM on Discord **@Adelemphii#6213**
   - You can also join my [Discord](https://discord.com/invite/sX6FUau) for quicker support!
 
 # How To Use
