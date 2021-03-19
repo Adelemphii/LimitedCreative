@@ -24,7 +24,7 @@ public class LimitedCreative extends JavaPlugin {
 	/*
 	 * 
 	 *	LimitedCreative by Adelemphii
-	 *	v1.4.2
+	 *	v1.4.1
 	 *  This project has been dropped, contact Adelemphii#6213 on discord if you wish to re-continue it.
 	 *  I'll hand over the Trello page of planned features/current bugs.
 	 *
