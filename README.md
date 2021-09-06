@@ -1,6 +1,6 @@
 # LimitedCreative
 
-### This project has been dropped, contact Adelemphii#6213 on discord if you wish to continue it. I'll hand over the Trello page of planned features/current bugs. (I'll help figure out issues with the current version, and even push bugfixes, however I wont be implementing new features after this point.)
+### I'm working on a rewrite of this code, update whenever I feel satisfied.
 
 Safely allow your players to access creative mode without fear of them abusing it. Constantly updated with suggested features and bugfixes.
 Check out the video for this plugin!
