@@ -1,6 +1,6 @@
 # LimitedCreative
 
-### I'm working on a rewrite of this code, update whenever I feel satisfied.
+### [Rewrite Here](https://github.com/Adelemphii/LimitedCreative) I made a mistake with github while rewriting, and it was simply easier to make a whole new repo.
 
 Safely allow your players to access creative mode without fear of them abusing it. Constantly updated with suggested features and bugfixes.
 Check out the video for this plugin!
