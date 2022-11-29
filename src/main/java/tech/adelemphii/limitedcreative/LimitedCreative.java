@@ -1,6 +1,7 @@
 package tech.adelemphii.limitedcreative;
 
 import co.aikar.commands.BukkitCommandManager;
+import com.jeff_media.customblockdata.CustomBlockData;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.PluginManager;
@@ -64,6 +65,7 @@ public final class LimitedCreative extends JavaPlugin {
     private void registerListeners() {
         PluginManager pm = getServer().getPluginManager();
 
+        CustomBlockData.registerListener(this);
         pm.registerEvents(new FallSafeListener(this), this);
         pm.registerEvents(new ArmorStandListener(this), this);
         pm.registerEvents(new BlacklistedCommandListener(this), this);
