@@ -1,0 +1,82 @@
+# This determines if a player in LC can damage entities or not
+player-damage-entities: false
+
+# Should the player have the glowing effect when in LC?
+glowing: true
+
+# Should the player be wearing armor when in LC?
+# Note: Inventories in creative are funky, and they MAY be able to remove the armor.
+#       Most of the time it's client-side, but there are some instances where they fully remove the armor.
+armor: true
+# What color should the armor be (Hex Code)? Red by default
+armor-color: "#fc0703"
+
+# Specify which blocks cannot be placed
+blacklisted-blocks:
+  - air
+  - diamond_block
+
+# This message is sent when a player tries to place a block which they cannot
+blacklisted-block-message: "&cYou cannot place <type> while in LC!"
+
+# Specify what blocks cannot be interacted with | Ensure you're on the correct version for those blocks.
+# I.e. doors, lecterns
+blacklisted-interactables:
+  - air
+  - lectern
+
+# This message is sent when a player tries to interact with a block which they cannot
+blacklisted-interactable-message: "&cYou cannot interact with <type> while in LC!"
+
+# Specify what items cannot be interacted with while in LC
+blacklisted-items:
+  - air
+  - bow
+  - potion
+
+# This message is sent when a player tries to interact while holding an item which they cannot use
+blacklisted-item-message: "&cYou cannot use <type> while in LC!"
+
+#Specify what blocks cannot be broken while in LC
+blacklisted-breakables:
+  - air
+  - netherite_block
+
+# This message is sent when a player tries to break a block which they cannot
+blacklisted-breakable-message: "&cYou cannot break <type> while in LC!"
+
+# Specify commands to disable while in LC
+blacklisted-commands:
+  - pl
+
+# This message is sent when a player tries to use a blacklisted command while in LC
+blacklisted-command-message: "&cThis command is disabled while in LC!"
+
+# This message is sent when a player exits LC
+player-exit-lc-message: "&aYou have been returned to survival mode. Inventory restored."
+
+# This message is sent when a player enters LC
+player-enter-lc-message: "&aLimitedCreative activated. Survival inventory saved."
+
+player-toggle-lc-other-message: "&aLimitedCreative toggled for <player>."
+
+# This message is sent when a player tries to drop an item
+player-drop-item-message: "&cYou cannot drop items while in LC."
+
+# This message is sent when a player tries to interact with an entity
+player-interact-entities-message: "&cYou cannot interact with entities while in LC!"
+
+# This message is sent when a player tries to manipulate an armor stand
+player-manipulate-armorstand-message: "&cYou cannot use Armor Stands while in LC!"
+
+# This message is sent when a player tries to run a command they have no permission for
+player-no-permission-message: "&cYou do not have permission to do use that command!"
+
+# This message is sent when a player toggles their own nightvision
+player-nightvision-toggle: "&aNightvision effect toggled."
+
+# This message is sent when a player toggles someone else's nightvision
+player-nightvision-toggle-other: "&aNightvision effect toggled for <player>."
+
+# This message is sent when a player reloads the config
+config-reloaded-message: "&aLimitedCreative: Config Reloaded."

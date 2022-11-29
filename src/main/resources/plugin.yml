@@ -1,0 +1,11 @@
+name: LimitedCreative
+version: '${project.version}'
+main: tech.adelemphii.limitedcreative.LimitedCreative
+api-version: 1.13
+authors: [ Adelemphii ]
+
+commands:
+  limitedcreative:
+    aliases: lc
+    description: Using /lc or /lc <Username> allows you to give LimitedCreative to yourself or another player.
+    permission: limitedcreative
