@@ -3,6 +3,7 @@
 ### The rewrite is here!
 
 Safely allow your players to access creative mode without fear of them abusing it. Constantly updated with suggested features and bugfixes.
+This plugin will work on any update **AFTER 1.14**, and if there is a version specific bug, make an issue on github!
 Check out the video for this plugin!
 [YouTube Showcase](https://youtu.be/Z21t_WqM8ho)
 
@@ -38,12 +39,9 @@ Check out the video for this plugin!
 - "limitedcreative.admin" - users with this are given permission to bypass the blacklist for blocks and items and reload the config.
 - "limitedcreative.mod" - users with this are able to run the /limitedcreative playerlist command.
 - "limitedcreative.give" - users with this are able to give LC & nightvision to others who do not have the "limitedcreative" permission.
-
-## Known Bugs:
- None!
  
 # Issues
-  - Make an issue [here](https://github.com/Adelemphii/LimitedCreative/issues)! 
+  - Make an issue / feature request [here](https://github.com/Adelemphii/LimitedCreative/issues)! 
 
 # How To Use
 To use this plugin, all you, as the user, has to do is place the LimitedCreative.jar file into your "Plugins" folder on your 1.13+ server. After booting up the server for the first time, a folder within your plugins folder named "LimitedCreative" is made. Inside that folder is a config.yml file, which you can configure. 
