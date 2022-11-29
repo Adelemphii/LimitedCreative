@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,10 +12,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import tech.adelemphii.limitedcreative.LimitedCreative;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class PreventGolemCreationListener implements Listener {
 
@@ -61,8 +59,13 @@ public class PreventGolemCreationListener implements Listener {
         Player closest = null;
         double closestDistance = maximumDistance + 1;
 
-        List<Player> players = location.getWorld().getPlayers();
-        for (Player player : players) {
+        List<Entity> entities =
+                new ArrayList<>(location.getWorld().getNearbyEntities(location, maximumDistance, maximumDistance, maximumDistance));
+        for (Entity entity : entities) {
+            if(!(entity instanceof Player)) {
+                continue;
+            }
+            Player player = (Player) entity;
             Location lastPlacedBlock = lastPlaced.get(player.getUniqueId());
 
             if (lastPlacedBlock != null) {
