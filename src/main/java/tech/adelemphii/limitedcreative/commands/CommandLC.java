@@ -3,6 +3,7 @@ package tech.adelemphii.limitedcreative.commands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -95,6 +96,15 @@ public class CommandLC extends BaseCommand {
         plugin.setConfigHandler(new ConfigHandler(plugin));
 
         ChatUtility.sendMessage(player, plugin.getConfigHandler().getConfigReloadedMessage());
+    }
+
+    @Subcommand("info")
+    @Description("Get info about the plugin")
+    @CommandPermission("limitedcreative.admin")
+    public void onInfo(Player player) {
+        ChatUtility.sendMessage(player, "&cLimitedCreative: Version-" + plugin.getDescription().getVersion());
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c  Description: " + plugin.getDescription().getDescription()));
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c  Author: " + plugin.getDescription().getAuthors().get(0)));
     }
 
     @HelpCommand
