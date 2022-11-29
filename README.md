@@ -3,6 +3,7 @@
 ### The rewrite is here!
 
 Safely allow your players to access creative mode without fear of them abusing it. Constantly updated with suggested features and bugfixes.
+This plugin will work on any update **AFTER 1.14**, and if there is a version specific bug, make an issue on github!
 Check out the video for this plugin!
 [YouTube Showcase](https://youtu.be/Z21t_WqM8ho)
 
